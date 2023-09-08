@@ -17,7 +17,10 @@ app.get("/api/generate-pdf", async ({ query }, res) => {
   const browser = await puppeteer.launch();
   const page = await browser.newPage();
 
-  await page.goto(`${process.env.BASE_URL}/${path}`, {
+  // await page.goto(`${process.env.BASE_URL}/${path}`, {
+  //   waitUntil: "networkidle2",
+  // });
+  await page.goto("https://classy-dragon-eba69c.netlify.app/", {
     waitUntil: "networkidle2",
   });
 
@@ -42,7 +45,8 @@ app.get("/api/generate-pdf", async ({ query }, res) => {
 
   const pdf = await page.pdf(pdfOptions);
   res.setHeader("Content-Type", "application/pdf");
-  res.setHeader("Content-Disposition", `attachment; filename=${path}.pdf`);
+  // res.setHeader("Content-Disposition", `attachment; filename=${path}.pdf`);
+  res.setHeader("Content-Disposition", `attachment; filename=plan.pdf`);
 
   res.send(pdf);
 

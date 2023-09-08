@@ -18,7 +18,6 @@ async function generatePDF() {
   const browser = await puppeteer.launch();
   const page = await browser.newPage();
 
-  // Naviguez vers votre page ou chargez le contenu HTML directement
   await page.goto(
     "https://64faf2d3c3c30c5ced9de1d9--classy-dragon-eba69c.netlify.app/",
     {
@@ -31,7 +30,6 @@ async function generatePDF() {
   });
 
   const pdfOptions = {
-    // format: "A4",
     width: `${contentWidth}px`,
     printBackground: true,
   };

@@ -14,7 +14,10 @@ app.use(express.json());
 
 app.get("/api/generate-pdf", async ({ query }, res) => {
   // const path = query.filePath || exampleResource;
-  const browser = await puppeteer.launch();
+  const browser = await puppeteer.launch({
+    headless: "new",
+    args: ["--no-sandbox"],
+  });
   const page = await browser.newPage();
 
   // await page.goto(`${process.env.BASE_URL}/${path}`, {

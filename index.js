@@ -7,16 +7,25 @@ dotenv.config();
 
 const app = express();
 
-// const exampleResource = "learn-everything-about-c-in-2-hours/";
-//http://localhost:3000/api/generate-pdf
 app.use(cors());
 app.use(express.json());
 
 app.get("/api/generate-pdf", async ({ query }, res) => {
-  // const path = query.filePath || exampleResource;
+  // const browser = await puppeteer.launch({
+  //   headless: "new",
+  //   args: ["--no-sandbox"],
+  // });
   const browser = await puppeteer.launch({
-    headless: "new",
-    args: ["--no-sandbox"],
+    args: [
+      "--disable-setuid-sandbox",
+      "--no-sandbox",
+      "--single-process",
+      "--no-zygote",
+    ],
+    executablePath:
+      process.env.NODE_ENV === "production"
+        ? process.env.PUPPETEER_EXECUTABLE_PATH
+        : puppeteer.executablePath(),
   });
   const page = await browser.newPage();
 
@@ -61,5 +70,3 @@ const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
   console.log(`PDF Server listens to port ${PORT}`);
 });
-
-

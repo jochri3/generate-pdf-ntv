@@ -13,7 +13,7 @@ app.use(cors());
 app.use(express.json());
 
 app.get("/api/generate-pdf", async ({ query }, res) => {
-  const path = query.filePath || exampleResource;
+  // const path = query.filePath || exampleResource;
   const browser = await puppeteer.launch();
   const page = await browser.newPage();
 

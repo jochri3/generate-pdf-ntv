@@ -11,10 +11,8 @@ app.use(cors());
 app.use(express.json());
 
 app.get("/api/generate-pdf", async ({ query }, res) => {
-  // const browser = await puppeteer.launch({
-  //   headless: "new",
-  //   args: ["--no-sandbox"],
-  // });
+  const path = query.filePath;
+  console.log(path);
   const browser = await puppeteer.launch({
     args: [
       "--disable-setuid-sandbox",
@@ -29,12 +27,12 @@ app.get("/api/generate-pdf", async ({ query }, res) => {
   });
   const page = await browser.newPage();
 
-  // await page.goto(`${process.env.BASE_URL}/${path}`, {
-  //   waitUntil: "networkidle2",
-  // });
-  await page.goto("https://classy-dragon-eba69c.netlify.app/", {
+  await page.goto(`${path}`, {
     waitUntil: "networkidle2",
   });
+  // await page.goto("https://classy-dragon-eba69c.netlify.app/", {
+  //   waitUntil: "networkidle2",
+  // });
 
   const contentWidth = await page.evaluate(async () => {
     const images = Array.from(document.querySelectorAll("img"));
@@ -58,7 +56,10 @@ app.get("/api/generate-pdf", async ({ query }, res) => {
   const pdf = await page.pdf(pdfOptions);
   res.setHeader("Content-Type", "application/pdf");
   // res.setHeader("Content-Disposition", `attachment; filename=${path}.pdf`);
-  res.setHeader("Content-Disposition", `attachment; filename=plan.pdf`);
+  res.setHeader(
+    "Content-Disposition",
+    `attachment; filename=plan_du_cours.pdf`
+  );
 
   res.send(pdf);
 

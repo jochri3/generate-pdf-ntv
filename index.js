@@ -10,8 +10,9 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-app.get("/api/generate-pdf", async ({ query }, res) => {
+app.post("/api/generate-pdf", async ({ query, body }, res) => {
   const path = query.filePath;
+  const title = body.title;
   console.log(path);
   const browser = await puppeteer.launch({
     args: [
@@ -30,10 +31,6 @@ app.get("/api/generate-pdf", async ({ query }, res) => {
   await page.goto(`${path}`, {
     waitUntil: "networkidle2",
   });
-  // await page.goto("https://classy-dragon-eba69c.netlify.app/", {
-  //   waitUntil: "networkidle2",
-  // });
-
   const contentWidth = await page.evaluate(async () => {
     const images = Array.from(document.querySelectorAll("img"));
     await Promise.all(
@@ -55,14 +52,8 @@ app.get("/api/generate-pdf", async ({ query }, res) => {
 
   const pdf = await page.pdf(pdfOptions);
   res.setHeader("Content-Type", "application/pdf");
-  // res.setHeader("Content-Disposition", `attachment; filename=${path}.pdf`);
-  res.setHeader(
-    "Content-Disposition",
-    `attachment; filename=plan_du_cours.pdf`
-  );
-
+  res.setHeader("Content-Disposition", `attachment; filename=${title}.pdf`);
   res.send(pdf);
-
   await browser.close();
 });
 

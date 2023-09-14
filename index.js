@@ -13,7 +13,11 @@ app.use(express.json());
 app.post("/api/generate-pdf", async ({ query, body }, res) => {
   const path = query.filePath;
   const title = body.title;
-  console.log(path);
+
+  if (!path || !title || !path.includes("formation-nativo.com")) {
+    return res.status(400).send("Bad request format");
+  }
+
   const browser = await puppeteer.launch({
     args: [
       "--disable-setuid-sandbox",
@@ -51,8 +55,9 @@ app.post("/api/generate-pdf", async ({ query, body }, res) => {
   };
 
   const pdf = await page.pdf(pdfOptions);
+  const fileName = "plan-de-cours";
   res.setHeader("Content-Type", "application/pdf");
-  res.setHeader("Content-Disposition", `attachment; filename=${title}.pdf`);
+  res.setHeader("Content-Disposition", `attachment; filename=${fileName}.pdf`);
   res.send(pdf);
   await browser.close();
 });

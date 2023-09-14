@@ -52,6 +52,12 @@ app.post("/api/generate-pdf", async ({ query, body }, res) => {
   const pdfOptions = {
     width: `${contentWidth}px`,
     printBackground: true,
+    margin: {
+      top: "20px",
+      bottom: "40px",
+      left: "20px",
+      right: "20px",
+    },
   };
 
   const pdf = await page.pdf(pdfOptions);

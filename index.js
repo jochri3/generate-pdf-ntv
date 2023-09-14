@@ -53,7 +53,7 @@ app.post("/api/generate-pdf", async ({ query, body }, res) => {
     width: `${contentWidth}px`,
     printBackground: true,
     margin: {
-      top: "20px",
+      top: "40px",
       bottom: "40px",
       left: "20px",
       right: "20px",
